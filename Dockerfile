@@ -43,6 +43,7 @@ RUN apk add --no-cache \
 		file \
 		gettext \
 		git \
+		yarn \
 	;
 
 RUN set -eux; \
@@ -112,6 +113,11 @@ RUN rm "$PHP_INI_DIR/conf.d/app.prod.ini"; \
 	mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 COPY --link docker/php/conf.d/app.dev.ini $PHP_INI_DIR/conf.d/
+
+RUN apk add --no-cache \
+		bash \
+		bash-completion \
+	;
 
 RUN set -eux; \
 	install-php-extensions xdebug

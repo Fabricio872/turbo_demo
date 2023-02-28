@@ -1,0 +1,9 @@
+<turbo-frame id="{{ id }}" {% if content is not defined %}src="{{ path(app.current_route) }}"{% endif %}>
+    {% if content is defined %}
+        {{ content|raw }}
+    {% else %}
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    {% endif %}
+</turbo-frame>

@@ -1,46 +1,34 @@
 {% set id = 'expensiveTable' %}
 
 {% set content %}
-        <table class="table">
-            <thead>
+    {{ form(columnSelector) }}
+
+    <table class="table">
+        {% for row in tableData %}
             <tr>
-                <th scope="col">#</th>
-                <th scope="col">First</th>
-                <th scope="col">Last</th>
-                <th scope="col">Handle</th>
+                {% for col in row %}
+                    <td>{{ col }}</td>
+                {% endfor %}
             </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <th scope="row">{{ 1 + page*3 }}</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-            </tr>
-            <tr>
-                <th scope="row">{{ 2 + page*3 }}</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-            </tr>
-            <tr>
-                <th scope="row">{{ 3 + page*3 }}</th>
-                <td colspan="2">Larry the Bird</td>
-                <td>@twitter</td>
-            </tr>
-            </tbody>
-        </table>
+        {% endfor %}
+    </table>
 
     <nav aria-label="...">
         <ul class="pagination">
             <li class="page-item{% if page <= 0 %} disabled{% endif %}">
-                <a class="page-link" href="{{ path('table.index',{"page": page - 1}) }}">Previous</a>
+                <a class="page-link" href="{{ path('table.index',{"page": page - 1, "column_selector": app.request.get("column_selector")}) }}">Previous</a>
             </li>
-            <li class="page-item {% if page == 0 %}active{% endif %}"><a class="page-link" href="{{ path('table.index',{"page": 0}) }}">1</a></li>
-            <li class="page-item {% if page == 1 %}active{% endif %}"><a class="page-link" href="{{ path('table.index',{"page": 1}) }}">2</a></li>
-            <li class="page-item {% if page == 2 %}active{% endif %}"><a class="page-link" href="{{ path('table.index',{"page": 2}) }}">3</a></li>
+            <li class="page-item {% if page == 0 %}active{% endif %}">
+                <a class="page-link" href="{{ path('table.index',{"page": 0, "column_selector": app.request.get("column_selector")}) }}">1</a>
+            </li>
+            <li class="page-item {% if page == 1 %}active{% endif %}">
+                <a class="page-link" href="{{ path('table.index',{"page": 1, "column_selector": app.request.get("column_selector")}) }}">2</a>
+            </li>
+            <li class="page-item {% if page == 2 %}active{% endif %}">
+                <a class="page-link" href="{{ path('table.index',{"page": 2, "column_selector": app.request.get("column_selector")}) }}">3</a>
+            </li>
             <li class="page-item{% if page >= 2 %} disabled{% endif %}">
-                <a class="page-link" href="{{ path('table.index',{"page": page + 1}) }}">Next</a>
+                <a class="page-link" href="{{ path('table.index',{"page": page + 1, "column_selector": app.request.get("column_selector")}) }}">Next</a>
             </li>
         </ul>
     </nav>

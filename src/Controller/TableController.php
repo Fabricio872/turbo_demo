@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Form\ColumnSelectorType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,9 +24,42 @@ class TableController extends AbstractController
 
     public function expensiveTable(Request $request): Response
     {
-        sleep(1);
-        return $this->render('table/table.html.twig', [
-            'page' => $request->get('page')
+        $columnSelectorForm = $this->createForm(ColumnSelectorType::class, options: [
+            'method' => 'GET'
         ]);
+
+        $columnSelectorForm->handleRequest($request);
+        $displayedColumns = [0, 1, 2, 3];
+        if ($columnSelectorForm->isSubmitted() && $columnSelectorForm->isValid()) {
+            $displayedColumns = array_keys(array_filter($columnSelectorForm->getData(), function ($column) {
+                return $column;
+            }));
+        }
+
+        $tableData = array_map(function (array $data) use ($displayedColumns) {
+            return array_intersect_key($data, $displayedColumns);
+        }, $this->arrayData());
+
+        return $this->render('table/table.html.twig', [
+            'page' => $request->get('page'),
+            'tableData' => $tableData,
+            'columnSelector' => $columnSelectorForm->createView()
+        ]);
+    }
+
+    private function arrayData(): array
+    {
+        return [
+            ['header0', 'header1', 'header2', 'header3'],
+            ['value0', 'value1', 'value2', 'value3'],
+            ['value0', 'value1', 'value2', 'value3'],
+            ['value0', 'value1', 'value2', 'value3'],
+            ['value0', 'value1', 'value2', 'value3'],
+            ['value0', 'value1', 'value2', 'value3'],
+            ['value0', 'value1', 'value2', 'value3'],
+            ['value0', 'value1', 'value2', 'value3'],
+            ['value0', 'value1', 'value2', 'value3'],
+            ['value0', 'value1', 'value2', 'value3']
+        ];
     }
 }
